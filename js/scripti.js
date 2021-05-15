@@ -1,89 +1,91 @@
-// // api url
-// const api_url = 
-//       "https://jsonplaceholder.typicode.com/todos";
-  
-// // Defining async function
-// async function getapi(url) {
-    
-//     // Storing response
-//     const response = await fetch(url);
-    
-//     // Storing data in form of JSON
-//     var data = await response.json();
-//     console.log(data);
-//     if (response) {
-//         hideloader();
-//     }
-//     show(data);
-// }
-// // Calling that async function
-// getapi(api_url);
-  
-// // Function to hide the loader
-// function hideloader() {
-//     document.getElementById('loading').style.display = 'none';
-// }
-// // Function to define innerHTML for HTML table
-// function show(data) {
-//     let tab = 
-//         `<tr>
-//           <th>userId</th>
-//           <th>id</th>
-//           <th>title</th>
-//           <th>completed</th>
-//          </tr>`;
-    
-//     // Loop to access all rows 
-//     for (let r of data.list) {
-//         tab += `<tr> 
-//     <td>${r.userId} </td>
-//     <td>${r.id}</td>
-//     <td>${r.title}</td> 
-//     <td>${r.completed}</td>          
-// </tr>`;
-//     }
-//     // Setting innerHTML as tab variable
-//     document.getElementById("lists").innerHTML = tab;
-// }
+function closeWindow(){
+    console.log("Close window");
+    window.open("index.html","_blank");
+    window.close();
+}
+function loadRest(){
+fetch('https://jsonplaceholder.typicode.com/todos')
+.then(res => res.json())
+.then(function(data){    
+                        
+let html='';
+data.forEach(function(data){
+if(data.completed==false)
+{                    
+html +=`
+<div>
+<strong> ${data.id}) </strong>
+${data.title}
+<input type="checkbox" name="check" onclick="return counter()">
+</div>
+`;
+                        
+}                    
+else {
+html +=`
+<div>
+<strong> ${data.id}) </strong>   
+${data.title}
+<input type="checkbox"disabled checked>
+</div>
+`;}
 
-let fetchBtn = document.getElementById("fetchBtn");
-  
-  
-    fetchBtn.addEventListener("click", buttonclickhandler);
-  
-    function buttonclickhandler() {
-  
-        // Instantiate an new XHR Object
-        const xhr = new XMLHttpRequest();
-  
-        // Open an obejct (GET/POST, PATH,
-        // ASYN-TRUE/FALSE)
-        xhr.open("GET", 
-"https://jsonplaceholder.typicode.com/todos", true);
-  
-  
-  
-  
-        // When response is ready
-        xhr.onload = function () {
-            if (this.status === 200) {
-  
-                // Changing string data into JSON Object
-                obj = JSON.parse(this.responseText);
-  
-                // Getting the ul element
-                let list = document.getElementById("list");
-                str = ""
-                for (key in obj.data) {
-                    str += `<li>${obj.data[key].title}</li>`;
-                }
-                list.innerHTML = str;
-            }
-            else {
-                console.log("File not found");
-            }
-        }
-  
-        // At last send the request
-        xhr.send();
+                           
+});
+                
+document.getElementById('result').innerHTML= html; 
+})    
+}   
+
+
+function counter(){               
+var a= document.getElementsByName('check');
+var i= 0;
+var count;
+for(count=0; count<a.length; count++){
+if(a[count].checked==true){
+i= i+1;
+}
+}
+if(i>=5){
+
+new Promise ((res, rej) =>{
+console.log('entered');
+
+if(i<=5){ setTimeout(() => res(),100); console.log('resolve');}
+if(i>=6){ setTimeout(() => rej(),100);console.log('reject');}
+}).then(mssg)
+.catch(refresh);
+                           
+function mssg(){
+
+   if(confirm('selected 5 tasks.Do you want to continue?')){
+       console.log('OK');}
+    else{console.log('Cancel');
+    alert(`completed ${i} tasks`);
+    alert('Press OK to Refresh');
+    location.reload();
+
     }
+   }
+
+}
+
+function refresh(){
+    if(confirm(`selected ${i} tasks. Do you want to continue?`)){
+        console.log('OK');
+    }
+else{ console.log('Cancel');
+    alert(`completed ${i} tasks`);
+    alert('Press OK to Refresh the page');
+   
+// loadRest();
+
+location.reload();
+
+
+}
+}
+}
+
+
